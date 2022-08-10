@@ -1,0 +1,19 @@
+{
+    "name": "RedStudio.OdinTreeNodeCanvas",
+    "rootNamespace": "RedStudio.OdinTreeNodeCanvas",
+    "references": [
+        "ParadoxNotion",
+        "Unity.EditorCoroutines.Editor",
+        "Unity.Localization",
+        "Unity.ResourceManager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
