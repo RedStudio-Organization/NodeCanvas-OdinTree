@@ -15,11 +15,34 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 [System.Serializable]
 public class LocalizedStatement : IStatement
 {
+    #region InternalTypes
+    class TmpStatement : IStatement
+    {
+        LocalizedStatement Master { get; set; }
+
+        string IStatement.text => Master.LocalizedText.GetLocalizedString();
+
+        AudioClip IStatement.audio => Master._audio;
+
+        string IStatement.meta => Master._meta;
+
+        public TmpStatement(LocalizedStatement master)
+        {
+            Master = master;
+        }
+    }
+    #endregion
+
+    #region Fields and constructor
     public LocalizedString LocalizedText;
     [ReadOnly] public string _text;
     public AudioClip _audio;
     public string _meta;
+    public LocalizedStatement() { } //required
+    #endregion
 
+    #region EditorFields
+    // Inject LocalizedText in _text field to see dialogue content in editor
     EditorCoroutine _editorRoutine;
     [Button("Update Node")]
     bool InternalUpdateDialogue()
@@ -28,11 +51,11 @@ public class LocalizedStatement : IStatement
         _editorRoutine = EditorCoroutineUtility.StartCoroutine(ImportRoutine(), this);
         IEnumerator ImportRoutine()
         {
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier("fr"));
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier("fr-FR"));
             yield return LocalizationSettings.InitializationOperation;  // Wait localization service
             AsyncOperationHandle<StringTable> asyncOperationHandle =
                 LocalizationSettings.StringDatabase
-                .GetTableAsync(LocalizedText.TableReference.TableCollectionName, LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier("fr")));
+                .GetTableAsync(LocalizedText.TableReference.TableCollectionName, LocalizationSettings.AvailableLocales.GetLocale(new LocaleIdentifier("fr-FR")));
             yield return asyncOperationHandle;
             if (asyncOperationHandle.Status == AsyncOperationStatus.Failed)
             {
@@ -44,19 +67,21 @@ public class LocalizedStatement : IStatement
         }
         return true;
     }
+    #endregion
 
-    //required
-    public LocalizedStatement() { }
-
+    #region IStatement Implementation
     string IStatement.text => LocalizedText.GetLocalizedString();
     AudioClip IStatement.audio => _audio;
     string IStatement.meta => _meta;
+    #endregion
 
+    #region Replace Variable Implementation (TODO)
     ///<summary>Replace the text of the statement found in brackets, with blackboard variables ToString and returns a Statement copy</summary>
     public IStatement BlackboardReplace(IBlackboard bb)
     {
-        var copy = ParadoxNotion.Serialization.JSONSerializer.Clone<LocalizedStatement>(this);
-
+        return new TmpStatement(this);
+#if false
+        var copy = ParadoxNotion.Serialization.JSONSerializer.Clone(this);
         copy._text = copy._text.ReplaceWithin('[', ']', (input) =>
         {
             object o = null;
@@ -77,13 +102,13 @@ public class LocalizedStatement : IStatement
             }
             return o != null ? o.ToString() : input;
         });
-
         return copy;
+#endif
     }
+    #endregion
 
-    public override string ToString()
-    {
-        return _text;
-    }
-
+    //public override string ToString()
+    //{
+    //    return _text;
+    //}
 }
