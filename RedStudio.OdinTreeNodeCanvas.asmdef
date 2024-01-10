@@ -5,7 +5,8 @@
         "ParadoxNotion",
         "Unity.EditorCoroutines.Editor",
         "Unity.Localization",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "NodeCanvas"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
