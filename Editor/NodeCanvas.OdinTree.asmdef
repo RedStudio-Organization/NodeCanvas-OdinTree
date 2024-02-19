@@ -1,0 +1,20 @@
+{
+    "name": "NodeCanvas.OdinTree",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2289059ddf1745b4d80a0f184af99d6b",
+        "GUID:66c2eb417c67ad849907d0769db96dbf",
+        "GUID:3d9d9d0db5eae2a4797ee6dd1d890ac5"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

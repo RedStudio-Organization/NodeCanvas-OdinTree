@@ -5,12 +5,14 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.EditorCoroutines.Editor;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 using UnityEngine.ResourceManagement.AsyncOperations;
+#if UNITY_EDITOR
+using Unity.EditorCoroutines.Editor;
+#endif
 
 [System.Serializable]
 public class LocalizedStatement : IStatement
@@ -41,6 +43,7 @@ public class LocalizedStatement : IStatement
     public LocalizedStatement() { } //required
     #endregion
 
+    #if UNITY_EDITOR
     #region EditorFields
     // Inject LocalizedText in _text field to see dialogue content in editor
     EditorCoroutine _editorRoutine;
@@ -68,7 +71,8 @@ public class LocalizedStatement : IStatement
         return true;
     }
     #endregion
-
+    #endif
+    
     #region IStatement Implementation
     string IStatement.text => LocalizedText.GetLocalizedString();
     AudioClip IStatement.audio => _audio;
